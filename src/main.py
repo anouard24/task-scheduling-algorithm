@@ -105,9 +105,9 @@ def main(pwd=[[],[],[]],n=-1):
 if __name__ == "__main__":
 	# np = input("Donner le nombre des problemes : ")
 	np = 1
-	generer = input("Voulez generer un fichier (Enrer 1) ou tapez le nom d'un fichier (Entrer 2) : ")
+	generer = int(input("Voulez generer un fichier (Enrer 1) ou tapez le nom d'un fichier (Entrer 2) : "))
 	if generer == 1:
-		ng = input("Donner le nombre des taches n : ")
+		ng = int(input("Donner le nombre des taches n : "))
 
 		nom_ficher = generate_file_pwd(ng,np)
 		print("Le Probleme est dans le fichier",nom_ficher)

@@ -10,11 +10,11 @@ def echange(maliste, i, j):
 
 def right_pivot(liste):
 	for i in range(1,len(liste)-1):
-		yield (liste[:i] + liste[i:][::-1])
+		yield (list(liste[:i]) + list(liste[i:][::-1]))
 
 def left_pivot(liste):
 	for i in range(2,len(liste)):
-		yield (liste[:i][::-1] + liste[i:])
+		yield (list(liste[:i][::-1]) + list(liste[i:]))
 
 def inversion(liste):
 	mini = maxi = 0
@@ -27,7 +27,7 @@ def inversion(liste):
 	l_between = liste[mini:maxi][::-1]
 	l_min = liste[0:mini]
 	l_max = liste[maxi:]
-	l = l_min+l_between+l_max
+	l = list(l_min)+list(l_between)+list(l_max)
 	assert len(l)==len(liste)
 	return l
 
@@ -160,7 +160,7 @@ def general_vns(pwd,x=[],time_to_run=0.9,time_to_run_reduced_vns=0.1): # le temp
 
 if __name__=="__main__":
 
-	n = input("Entrer le nombre des taches N : ")
+	n = int(input("Entrer le nombre des taches N : "))
 	pwd = generatePWD(n)	
 
 	print("general_vns")
