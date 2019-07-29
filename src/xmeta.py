@@ -163,7 +163,7 @@ if __name__=="__main__":
 	n = input("Entrer le nombre des taches N : ")
 	pwd = generatePWD(n)	
 
-	print "general_vns"
+	print("general_vns")
 	x = range(n)
 	debut = time.time()
 	oov,pnv =  general_vns(pwd,x,0.45,0.05)
@@ -172,13 +172,13 @@ if __name__=="__main__":
 	if n<=20:
 		ret = main.main(pwd)
 		res = ret[1:][::-1]
-		print res[0],res[1]
+		print(res[0],res[1])
 	else:
 		pass
 		# printPWD(pwd)
-	print oov
-	print pnv
-	print
-	print fin - debut
+	print(oov)
+	print(pnv)
+	print()
+	print(fin - debut)
 
 

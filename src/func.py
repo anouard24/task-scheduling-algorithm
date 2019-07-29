@@ -65,16 +65,16 @@ def generatePWD_best_cases(n):
 
 def printPWD(pwd):
 	p,w,d = pwd
-	print "i     ",
+	print("i     ", end=" ")
 	for i in range(len(p)):
-		print "%3d "%(i),
-	print ""
+		print("%3d "%(i), end=" ")
+	print("")
 	for nom,l in zip(["p[i]  ","w[i]  ","d[i]  "],list(pwd)):
-		print nom,
+		print(nom, end=" ")
 		for x in l:
-			print "%3.0f "%(x),
-		print ""
-	print "" 
+			print("%3.0f "%(x), end=" ")
+		print("")
+	print("") 
 
 
 def factorielle(n,acc=1):
@@ -105,9 +105,9 @@ def compare_n_with_dp(start,end):
 	ldp = max(1+len(str(sommeDP(end))),8)
 	ldp_best = max(1+len(str(sommeDP_best(end))),8)
 
-	print "%{0}s    %{1}s    %{2}s    %{3}s".format(lnm,lnf,ldp_best,ldp)%("i","n!","DP best","DP worst")
+	print("%{0}s    %{1}s    %{2}s    %{3}s".format(lnm,lnf,ldp_best,ldp)%("i","n!","DP best","DP worst"))
 	for i in range(start,end+1):
-		print "%{}s    %{}d    %{}d    %{}d".format(lnm,lnf,ldp_best,ldp)%(i,factorielle(i),sommeDP_best(i),sommeDP(i))
+		print("%{}s    %{}d    %{}d    %{}d".format(lnm,lnf,ldp_best,ldp)%(i,factorielle(i),sommeDP_best(i),sommeDP(i)))
 
 # ---------------------- FILE SCAN FUNCTIONS -------------------------------
 def supespace(s):

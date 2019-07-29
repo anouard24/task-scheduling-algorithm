@@ -110,11 +110,11 @@ if __name__ == "__main__":
 		ng = input("Donner le nombre des taches n : ")
 
 		nom_ficher = generate_file_pwd(ng,np)
-		print "Le Probleme est dans le fichier",nom_ficher
+		print("Le Probleme est dans le fichier",nom_ficher)
 	else:
 		nom_ficher = input("Entrer le nom du fichier : ")
 	pwds,file_out = scan(nom_ficher)
-	print "La solution sera dans le fichier",
+	print("La solution sera dans le fichier", end=" ")
 	resultats = map(main,pwds)
 
 
