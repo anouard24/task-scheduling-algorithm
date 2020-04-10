@@ -1,176 +1,190 @@
-import time
 import random
-from func import *
+import time
 
-def echange(maliste, i, j):
-	l = maliste[:]
-	l[i], l[j] = l[j], l[i]
-	return l
-
-def right_pivot(liste):
-	for i in range(1,len(liste)-1):
-		yield (list(liste[:i]) + list(liste[i:][::-1]))
-
-def left_pivot(liste):
-	for i in range(2,len(liste)):
-		yield (list(liste[:i][::-1]) + list(liste[i:]))
-
-def inversion(liste):
-	mini = maxi = 0
-	while abs(mini-maxi)<2:
-		mini = random.randint(1, len(liste) - 2)
-		maxi = random.randint(2, len(liste) - 1)
-	if mini>maxi:
-		mini, maxi = maxi, mini
-
-	l_between = liste[mini:maxi][::-1]
-	l_min = liste[0:mini]
-	l_max = liste[maxi:]
-	l = list(l_min)+list(l_between)+list(l_max)
-	assert len(l)==len(liste)
-	return l
-
-def inversion_liste(liste):
-	tot=[]
-	i = 0
-	while i < len(liste)-2:
-		l = inversion(liste)
-		if l not in tot:
-			tot.append(l)
-			i+=1
-	return tot
-
-def swap_op(liste):
-	for i in range(len(liste)-1):
-		for j in range(i+1,len(liste)):
-			yield (echange(liste, i, j))
-
-neighborhood_structures = [right_pivot,inversion_liste,left_pivot,swap_op]
-
-def fonction_objective(pwd,liste):
-	p,w,d = pwd
-	s = c = 0
-	for x in liste:
-		c = c + p[x]
-		s = s + max(0,c-d[x])*w[x]
-	return s
+from func import generatePWD
 
 
-# #####################################################
-def shaking(x,k=0):
-	liste_x_prime = list(neighborhood_structures[k](x))	# N_k(x)
-	index_x_prime = random.randint(0,len(liste_x_prime)-1) # random index
-	
-	x_prime = liste_x_prime[index_x_prime] # prend la valeur de l'index generer par random
-	return x_prime
-
-def reduced_vns(pwd,x=[],time_to_run=0.1): # le temps sera 0.1 second par defaut si on n'a pas entrer le temps
-	# Initialization
-	# si x est vide <=> [] alors on genere x par random
-	if x==[]:
-		p,w,d = pwd
-		n = len(p) # le nombre des taches
-		indices = range(n)
-		x = indices
-		# initial solution x
-		random.shuffle(x)
-	
-	k_max = len(neighborhood_structures)-1 # tous les structures de voisinage sauf la derniere
-
-	x_value = fonction_objective(pwd,x)
-	
-	stopping_condition = False
-	start_time = time.time() # on prend le temps avant de debuter
-	while stopping_condition == False:
-		k = 0
-		while k != k_max:
-			x_prime = shaking(x,k) # generer x_prime appartient a N_k(x)
-			x_prime_value = fonction_objective(pwd,x_prime)
-			if x_prime_value < x_value:
-				x = x_prime
-				x_value = x_prime_value
-				k = 0
-			else:
-				k = k + 1
-
-			if time.time() - start_time > time_to_run:
-				stopping_condition = True
-				break
-	return x,x_value
-
-def general_vns(pwd,x=[],time_to_run=0.9,time_to_run_reduced_vns=0.1): # le temps sera 0.9 second par defaut si on n'a pas entrer le temps
-	# Initialization
-	# si x est vide <=> [] alors on genere x par random
-	if x==[]:
-		p,w,d = pwd
-		n = len(p) # le nombre des taches
-		indices = range(n)
-		x = indices
-		# initial solution x
-		random.shuffle(x)
-	
-	k_max = len(neighborhood_structures) # tous les structures de voisinage
-	l_max = len(neighborhood_structures) - 1  # tous les structures de voisinage sauf la derniere
-
-	# improve x by using RVNS <=> reduced_vns()
-	x , x_value = reduced_vns(pwd,x,time_to_run_reduced_vns)
-	
-	stopping_condition = False
-	start_time = time.time() # on prend le temps avant de debuter
-	while stopping_condition == False:
-		k = 0
-		while k != k_max and stopping_condition == False:
-			x_prime = shaking(x,k) # generer x_prime appartient a N_k(x)
-			x_prime_value = fonction_objective(pwd,x_prime)
-			# local search by VND
-			l = 0
-			while l != l_max and stopping_condition == False:
-				x_second = []
-				x_second_value = float("inf")
-				# Exploration of neighborhood
-				for current_x_second in neighborhood_structures[l](x_prime):
-					current_x_second_value = fonction_objective(pwd,current_x_second)
-					if current_x_second_value < x_second_value:
-						x_second = current_x_second
-						x_second_value = current_x_second_value
-
-					if time.time() - start_time > time_to_run:
-						stopping_condition = True
-						break
-				if x_second_value < x_prime_value:
-					x_prime = x_second
-					x_prime_value = x_second_value
-					l = 0
-				else:
-					l = l + 1
-
-			if x_prime_value < x_value:
-				x = x_prime
-				x_value = x_prime_value
-				k = 0
-			else:
-				k = k + 1
-
-	return x,x_value
+def swapped(tasks, i, j):
+    new_tasks = tasks[:]
+    new_tasks[i], new_tasks[j] = new_tasks[j], new_tasks[i]
+    return new_tasks
 
 
+def right_pivot(tasks):
+    for i in range(1, len(tasks) - 1):
+        yield list(tasks[:i] + tasks[i:][::-1])
 
 
-
-if __name__=="__main__":
-
-	n = int(input("Entrer le nombre des taches N : "))
-	pwd = generatePWD(n)	
-
-	print("general_vns")
-	x = range(n)
-	debut = time.time()
-	oov,pnv =  general_vns(pwd,x,0.45,0.05)
-	fin = time.time()
-
-	print(oov)
-	print(pnv)
-	print()
-	print(fin - debut)
+def left_pivot(tasks):
+    for i in range(2, len(tasks)):
+        yield list(tasks[:i][::-1] + tasks[i:])
 
 
+def inversion(tasks):
+    mini = maxi = 0
+    while abs(mini - maxi) < 2:
+        mini = random.randint(1, len(tasks) - 2)
+        maxi = random.randint(2, len(tasks) - 1)
+
+    if mini > maxi:
+        mini, maxi = maxi, mini
+
+    tasks_between_reversed = tasks[mini:maxi][::-1]
+    l_min = tasks[:mini]
+    l_max = tasks[maxi:]
+
+    new_tasks = list(l_min + tasks_between_reversed + l_max)
+
+    assert len(new_tasks) == len(tasks)
+
+    return new_tasks
+
+
+def inversion_tasks(tasks):
+    list_of_tasks = []
+    i = 0
+    while i < len(tasks) - 2:
+        new_tasks = inversion(tasks)
+        if new_tasks not in list_of_tasks:
+            list_of_tasks.append(new_tasks)
+            i += 1
+    return list_of_tasks
+
+
+def swap_op(tasks):
+    for i in range(len(tasks) - 1):
+        for j in range(i + 1, len(tasks)):
+            yield swapped(tasks, i, j)
+
+
+NEIGHBORHOOD_STRUCTURES = [right_pivot, inversion_tasks, left_pivot, swap_op]
+
+
+def penalty_of_tasks(pwd, tasks):
+    execution_time, weight_penalty, date_limit = pwd
+
+    sum_cost = cost = 0
+
+    for task in tasks:
+        cost += execution_time[task]
+        sum_cost += max(0, cost - date_limit[task]) * weight_penalty[task]
+
+    return sum_cost
+
+
+def shaking(tasks, k=0):
+    neighborhood_function = NEIGHBORHOOD_STRUCTURES[k]
+    tasks_x_prime = list(neighborhood_function(tasks))
+
+    index_x_prime = random.randint(0, len(tasks_x_prime) - 1)
+
+    x_prime = tasks_x_prime[index_x_prime]
+    return x_prime
+
+
+def reduced_vns(pwd, tasks=None, time_to_run=0.1):
+    if not tasks:
+        tasks_number = len(pwd[0])
+        indices = range(tasks_number)
+        tasks = indices
+        random.shuffle(tasks)  # initial solution
+
+    k_max = len(NEIGHBORHOOD_STRUCTURES) - 1  # all neighborhood structures except the last
+
+    x_min_cost = penalty_of_tasks(pwd, tasks)
+
+    stopping_condition = False
+    start_time = time.time()  # take the time before start
+
+    while not stopping_condition:
+        k = 0
+        while k != k_max:
+            x_prime = shaking(tasks, k)  # generate x_prime from the k-th neighborhood structures
+
+            x_prime_cost = penalty_of_tasks(pwd, x_prime)
+
+            if x_prime_cost < x_min_cost:
+                tasks = x_prime
+                x_min_cost = x_prime_cost
+                k = 0
+            else:
+                k = k + 1
+
+            if time.time() - start_time > time_to_run:
+                stopping_condition = True
+                break
+
+    return tasks, x_min_cost
+
+
+def general_vns(pwd, tasks=None, time_to_run=0.9, time_to_run_reduced_vns=0.1):
+    if not tasks:
+        tasks_number = len(pwd[0])
+        indices = range(tasks_number)
+        tasks = indices
+        random.shuffle(tasks)  # initial solution
+
+    k_max = len(NEIGHBORHOOD_STRUCTURES)  # all neighborhood structures
+    l_max = len(NEIGHBORHOOD_STRUCTURES) - 1  # all neighborhood structures except the last
+
+    # improve x by using Reduced VNS <=> reduced_vns()
+    tasks, x_cost = reduced_vns(pwd, tasks, time_to_run_reduced_vns)
+
+    stopping_condition = False
+    start_time = time.time()  # take the time before start
+    while not stopping_condition:
+        k = 0
+        while k != k_max and stopping_condition is False:
+            x_prime = shaking(tasks, k)  # generate x_prime from the k-th neighborhood structures
+            x_prime_cost = penalty_of_tasks(pwd, x_prime)
+            # local search by VND
+            cpt_l = 0
+            while cpt_l != l_max and stopping_condition is False:
+                x_second = []
+                x_second_cost = float("inf")
+
+                # Exploration of neighborhood
+                for current_x_second in NEIGHBORHOOD_STRUCTURES[cpt_l](x_prime):
+
+                    current_x_second_value = penalty_of_tasks(pwd, current_x_second)
+
+                    if current_x_second_value < x_second_cost:
+                        x_second = current_x_second
+                        x_second_cost = current_x_second_value
+
+                    if time.time() - start_time > time_to_run:
+                        stopping_condition = True
+                        break
+
+                if x_second_cost < x_prime_cost:
+                    x_prime = x_second
+                    x_prime_cost = x_second_cost
+                    cpt_l = 0
+                else:
+                    cpt_l = cpt_l + 1
+
+            if x_prime_cost < x_cost:
+                tasks = x_prime
+                x_cost = x_prime_cost
+                k = 0
+            else:
+                k = k + 1
+
+    return tasks, x_cost
+
+
+if __name__ == "__main__":
+    NUMBER_OF_TASKS = int(input("Enter number of tasks N to generate: "))
+    PWD = generatePWD(NUMBER_OF_TASKS)
+
+    print("general_vns")
+    TASKS = list(range(NUMBER_OF_TASKS))
+
+    START_TIME = time.time()
+    ORDERED_TASKS, MIN_PENALTY = general_vns(PWD, TASKS, 0.45, 0.05)
+    END_TIME = time.time()
+
+    print(ORDERED_TASKS)
+    print(MIN_PENALTY)
+    print()
+    print(END_TIME - START_TIME)
