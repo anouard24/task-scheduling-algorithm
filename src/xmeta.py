@@ -1,7 +1,6 @@
 import time
 import random
 from func import *
-import main
 
 def echange(maliste, i, j):
 	l = maliste[:]
@@ -169,13 +168,6 @@ if __name__=="__main__":
 	oov,pnv =  general_vns(pwd,x,0.45,0.05)
 	fin = time.time()
 
-	if n<=20:
-		ret = main.main(pwd)
-		res = ret[1:][::-1]
-		print(res[0],res[1])
-	else:
-		pass
-		# printPWD(pwd)
 	print(oov)
 	print(pnv)
 	print()
