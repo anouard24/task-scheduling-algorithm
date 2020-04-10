@@ -151,33 +151,6 @@ def scan(f="pwdin.txt",dir=".",sep="\n"):
 	return pwds,file_out
 
 
-def ht():
-	# ng = input("Donner le nombre des taches n : ")
-	ht =  open('TESTSSSSS.py', 'a')
-
-	for i in range(15,16):
-		ht.write("# pour "+str(i)+" taches :\n\n")
-		j = 0
-		while j < 1:
-			pwd,m,o,dico_all= main(i)
-			if len(o)<=1:
-				dico_all_list = dico_all.values()
-				p,w,d = pwd
-				ht.write("p = "+str(p)+"\n")
-				ht.write("w = "+str(w)+"\n")
-				ht.write("d = "+str(d)+"\n\n")
-				for pn,ln in dico_all_list:
-					for lnn in ln:
-						ht.write("f( "+str(lnn)+" ) = "+str(pn)+"\n")
-				ht.write("\n")
-				for ii,oo in enumerate(o):
-					ht.write("Ordon_optimal_"+str(ii)+" = "+str(oo)+"\n")
-				ht.write("penalite_minimal = "+str(m)+"\n")
-				ht.write("# "+"-"*50+"\n\n")
-				j+=1
-		ht.write("\n\n\n"+("# "+"-"*80+"\n")*2+"\n")
-	ht.close()
-
 def generate_file_pwd(n=10,number_pwd=1):
 	nom_du_fichier = "problems__"+time.strftime("%Y_%b_%d__%H_%M_%S", time.gmtime())+".txt"
 	fichier_cree = open(nom_du_fichier,"w")
