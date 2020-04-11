@@ -1,33 +1,34 @@
 # -*- coding: utf-8 -*-
+"""
+Main module that contains driver code to use the algorithm in an interactive mode
+"""
+
+from func import generate_file_pwd, scan, write_to_file
+from dynamique import dynamique
 
 
-from func import *
-from dynamique import *
-
-
-def main(pwd=None, n=-1):
-    if n > 0:
-        pwd = generatePWD_simple(n)
-
-    p, w, d = pwd
-    pmd, ood = dynamique(p, w, d)
+def main(pwd):
+    """
+    Function that execute the dynamic algorithm and return the results
+    """
+    pmd, ood = dynamique(*pwd)
 
     return pwd, pmd, ood
 
 
 if __name__ == "__main__":
 
-    np = 1
-    generer = int(input("Voulez generer un fichier (Enrer 1) ou tapez le nom d'un fichier (Entrer 2) : "))
-    if generer == 1:
-        ng = int(input("Donner le nombre des taches n : "))
+    ACTION = input("1.Generate a file\n2.Enter file name\n[?] Your choice: ")
 
-        nom_ficher = generate_file_pwd(ng, np)
-        print("Le Probleme est dans le fichier", nom_ficher)
+    if ACTION == '1':
+        NG = int(input("Enter the number of tasks N: "))
+        FILE_NAME = generate_file_pwd(NG)
+        print("tasks data in file: ", FILE_NAME)
     else:
-        nom_ficher = input("Entrer le nom du fichier : ")
-    pwds, file_out = scan(nom_ficher)
-    print("La solution sera dans le fichier", end=" ")
-    resultats = map(main, pwds)
+        FILE_NAME = input("Enter path to file name: ")
 
-    write_to_file(file_out, resultats)
+    LIST_PWD, FILE_OUT = scan(FILE_NAME)
+    print("Solution will be in file: ", FILE_OUT)
+    RESULTS = map(main, LIST_PWD)
+
+    write_to_file(FILE_OUT, RESULTS)
