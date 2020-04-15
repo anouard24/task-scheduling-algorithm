@@ -67,45 +67,39 @@ def generatePWD_best_cases(n):
 
 
 # ---------------------- FILE SCAN FUNCTIONS -------------------------------
-def supespace(s):
-    return s.replace(" ", "").replace("\t", "")
 
 
-def listFromStr(string):
-    return [int(c) for c in string.split(';')]
+def scan(f='problem_in.txt', sep='\n'):
+    def list_from_str(string: str):
+        return [int(c) for c in string.split(';')]
 
+    file = open(f, 'r')
 
-def scan(f="pwdin.txt", dir=".", sep="\n"):
-    fin = open(f, "r")
-    donnee = fin.read()
-    lignes = donnee.split(sep)
-    lignes = [s for s in map(supespace, lignes) if s != ""]
-    for i in range(len(lignes)):
-        lignes[i].replace("\r", "")
+    lines = file.read().split(sep)
+    for i in range(len(lines)):
+        lines[i] = lines[i].strip().replace(' ', '')
 
-    nx = 1
-    if lignes[0].isdigit():
-        n = int(lignes[0])
-        nx = 2
+    n = 1
+    i = 0
+    if lines[0].isdigit():
+        n = int(lines[0])
+        i = 1
 
     pwds = []
-    for k in range(n):
+    for _ in range(n):
         pwds.append([])
-    ip = 0
-    i = 0 + 1 * (nx > 1)
-    while i - 2 < len(lignes) and ip < n:
-        if ";" in lignes[i]:
-            pwds[ip].append(listFromStr(lignes[i]))
-        if ";" in lignes[i + 1]:
-            pwds[ip].append(listFromStr(lignes[i + 1]))
-        if ";" in lignes[i + 2]:
-            pwds[ip].append(listFromStr(lignes[i + 2]))
-        ip += 1
-        i += 3
-    fin.close()
 
-    i = len(f) - f[::-1].index(".")
-    file_out = f[:i - 1] + "_solution.txt"
+    for ip in range(n):
+        ii = i
+        while i - 3 < ii:
+            if ";" in lines[i]:
+                pwds[ip].append(list_from_str(lines[i]))
+                i += 1
+
+    file.close()
+
+    i = f.rindex(".")
+    file_out = f[:i] + "_solution.txt"
     return pwds, file_out
 
 
