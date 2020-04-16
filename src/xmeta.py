@@ -1,7 +1,7 @@
 import random
 import time
 
-from func import generatePWD
+from func import generate_pwd
 
 
 def swapped(tasks, i, j):
@@ -175,7 +175,7 @@ def general_vns(pwd, tasks=None, time_to_run=0.9, time_to_run_reduced_vns=0.1):
 
 if __name__ == "__main__":
     NUMBER_OF_TASKS = int(input("Enter number of tasks N to generate: "))
-    PWD = generatePWD(NUMBER_OF_TASKS)
+    PWD = generate_pwd(NUMBER_OF_TASKS)
 
     print("general_vns")
     TASKS = list(range(NUMBER_OF_TASKS))

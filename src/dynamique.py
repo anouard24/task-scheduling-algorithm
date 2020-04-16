@@ -23,7 +23,7 @@ def dynamique(p, w, d):
             cost = 0
             for k, r in enumerate(combinations(current_tasks, n_i - 1)):
                 j = current_tasks[n_i - k - 1]
-                fa, fr, cost = dictionary.get(r)
+                fa, fr, cost = dictionary.get(r, None)
                 cost += p[j]
                 ff = fa + max(0, cost - d[j]) * w[j]
                 if ff < min_penalty:
@@ -35,7 +35,7 @@ def dynamique(p, w, d):
         dictionary = temp_dictionary
         temp_dictionary = dict()
 
-    return dictionary.get(indices)[:2]
+    return dictionary.get(indices, None)[:2]
 
 
 def dynamique_all(p, w, d):
@@ -68,4 +68,4 @@ def dynamique_all(p, w, d):
         dictionary = temp_dictionary
         temp_dictionary = dict()
 
-    return dictionary.get(indices)[:2]
+    return dictionary.get(indices, None)[:2]
