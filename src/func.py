@@ -2,19 +2,6 @@ import random
 import time
 
 
-def generatePWD_simple(n):
-    """	GENERER P,W,D du professeur
-        """
-    p, w, d = [], [], []
-    for i in range(n):
-        p.append(random.randint(1, 100))
-        w.append(random.randint(1, 10))
-    Ep = sum(p)
-    for i in range(n):
-        d.append(random.randint(int(0.2 * Ep), int(0.6 * Ep)))
-    return p, w, d
-
-
 def generatePWD(n):
     """	GENERER P,W,D general
         """
@@ -25,44 +12,6 @@ def generatePWD(n):
     Ep = sum(p)
     for i in range(n):
         d.append(random.randint(max(p[i], int(0.2 * Ep)), max(int(0.6 * Ep), p[i])))
-    return p, w, d
-
-
-def generatePWD_nozero(n):
-    """	GENERER P,W,D avec les pire des cas
-        """
-    p, w, d = [], [], []
-    for i in range(n):
-        p.append(random.randint(2, 100))
-        w.append(random.randint(1, 10))
-    for i in range(n):
-        d.append(random.randint(1, p[i] - 1))
-    return p, w, d
-
-
-def generatePWD_zeros(n):
-    """	GENERER P,W,D avec des cas en moyenne
-        """
-    p, w, d = [], [], []
-    for i in range(n):
-        p.append(random.randint(1, 100))
-        w.append(random.randint(1, 10))
-    Ep = sum(p)
-    for i in range(n):
-        d.append(random.randint(int(2 * p[i]), max(2 * p[i], Ep)))
-    return p, w, d
-
-
-def generatePWD_best_cases(n):
-    """	GENERER P,W,D avec des bon cas <=> penalite minimal = 0
-        """
-    p, w, d = [], [], []
-    for i in range(n):
-        p.append(random.randint(1, 100))
-        w.append(random.randint(1, 10))
-    Ep = sum(p)
-    for i in range(n):
-        d.append(Ep + p[i])
     return p, w, d
 
 
@@ -108,7 +57,7 @@ def generate_file_pwd(n=10, number_pwd=1):
     fichier_cree = open(nom_du_fichier, "w")
     fichier_cree.write(str(number_pwd) + "\n")
     for i in range(number_pwd):
-        pwd = generatePWD_simple(n)
+        pwd = generatePWD(n)
         for tab in pwd:
             fichier_cree.write(";".join(str(x) for x in tab) + "\n")
         fichier_cree.write("\n")
