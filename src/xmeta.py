@@ -1,3 +1,10 @@
+"""
+Module that contains function to solve the problem
+with heuristics: Variable Neighborhood Search
+    - General VNS
+    - Reduced VNS
+"""
+
 import random
 import time
 
