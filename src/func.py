@@ -7,6 +7,28 @@ import random
 import time
 
 
+def penalty_of_tasks(pwd, tasks):
+    """
+    Function to calculate cost of a given order of task
+    params:
+        pwd: multi-dimensional list [P, W, D] that contain:
+            - P Execution time
+            - W Weight penalty
+            - D Date limit
+        tasks: task indices
+    """
+
+    execution_time, weight_penalty, date_limit = pwd
+
+    sum_cost = cost = 0
+
+    for task in tasks:
+        cost += execution_time[task]
+        sum_cost += max(0, cost - date_limit[task]) * weight_penalty[task]
+
+    return sum_cost
+
+
 def generate_pwd(problems_number: int):
     """
     Generate data of a problem P, W, D

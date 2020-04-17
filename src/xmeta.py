@@ -1,7 +1,7 @@
 import random
 import time
 
-from func import generate_pwd
+from func import generate_pwd, penalty_of_tasks
 
 
 def swapped(tasks, i, j):
@@ -58,18 +58,6 @@ def swap_op(tasks):
 
 
 NEIGHBORHOOD_STRUCTURES = [right_pivot, inversion_tasks, left_pivot, swap_op]
-
-
-def penalty_of_tasks(pwd, tasks):
-    execution_time, weight_penalty, date_limit = pwd
-
-    sum_cost = cost = 0
-
-    for task in tasks:
-        cost += execution_time[task]
-        sum_cost += max(0, cost - date_limit[task]) * weight_penalty[task]
-
-    return sum_cost
 
 
 def shaking(tasks, k=0):
