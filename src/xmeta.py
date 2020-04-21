@@ -80,7 +80,7 @@ def shaking(tasks, k=0):
 def reduced_vns(pwd, tasks=None, time_to_run=0.1):
     if not tasks:
         tasks_number = len(pwd[0])
-        indices = range(tasks_number)
+        indices = list(range(tasks_number))
         tasks = indices
         random.shuffle(tasks)  # initial solution
 
@@ -115,7 +115,7 @@ def reduced_vns(pwd, tasks=None, time_to_run=0.1):
 def general_vns(pwd, tasks=None, time_to_run=0.9, time_to_run_reduced_vns=0.1):
     if not tasks:
         tasks_number = len(pwd[0])
-        indices = range(tasks_number)
+        indices = list(range(tasks_number))
         tasks = indices
         random.shuffle(tasks)  # initial solution
 
